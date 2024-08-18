@@ -22,5 +22,8 @@ export default {
 
     daisyui: {
         themes: ["light", "dark"],
+        base: true,
+        styled: true,
+        utils: true,
     },
 };
