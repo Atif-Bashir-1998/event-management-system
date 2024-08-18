@@ -11,9 +11,12 @@ use App\Constants\RolePermission\Constants;
 
 class RoleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // return response(null, 200);
+        if ($request->user()->cannot('view_role')) {
+            abort(403);
+        }
+
         $roles = Role::all();
         return Inertia::render('RolePermission/Role', [
             'roles' => $roles,
@@ -22,6 +25,10 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->user()->cannot('create_role')) {
+            abort(403);
+        }
+
         $role_name = $request->input('name');
 
         Role::create(['name' => $role_name]);
@@ -31,6 +38,10 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role)
     {
+        if ($request->user()->cannot('update_role')) {
+            abort(403);
+        }
+
         $role->update([
             'name' => $request->input('name')
         ]);
