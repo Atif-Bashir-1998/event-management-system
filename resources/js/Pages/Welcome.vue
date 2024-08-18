@@ -1,4 +1,6 @@
 <template>
+    <Head title="Welcome" />
+
     <div class="min-h-screen bg-base-200 flex items-center justify-center">
         <div class="max-w-4xl p-8 bg-white rounded-lg shadow-lg text-center">
             <h1 class="text-4xl font-bold text-primary">Welcome to Event Management System</h1>
@@ -26,6 +28,8 @@
 </template>
 
 <script setup lang="ts">
+import { Head } from '@inertiajs/vue3';
+
 </script>
 
 <style scoped>
