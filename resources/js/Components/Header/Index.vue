@@ -111,7 +111,7 @@
                             <li class="flex">
                                 <Link
                                     class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md link-custom"
-                                    :href="route('profile.edit', { locale })"
+                                    :href="route('profile.edit')"
                                 >
                                     <UserIcon class="w-4 h-4 mr-3" />
                                     <span>Profile</span>
@@ -120,7 +120,7 @@
                             <li class="flex">
                                 <Link
                                     class="inline-flex items-center w-full px-2 py-1 text-sm font-semibold transition-colors duration-150 rounded-md link-custom"
-                                    :href="route('logout', { locale })"
+                                    :href="route('logout')"
                                     method="post"
                                     as="button"
                                 >
@@ -145,6 +145,7 @@ import {
     MoonIcon,
     BellIcon,
     UserIcon,
+    ArrowLeftOnRectangleIcon
 } from "@heroicons/vue/24/outline";
 import { useSidebarStore } from "@/Stores/sidebar";
 import { useDarkModeStore } from "@/Stores/darkMode";
