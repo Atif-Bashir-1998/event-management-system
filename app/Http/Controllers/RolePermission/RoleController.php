@@ -5,51 +5,61 @@ namespace App\Http\Controllers\RolePermission;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 use App\Constants\RolePermission\Constants;
+use Illuminate\Routing\Controllers\Middleware;
+use Spatie\Permission\Models\Permission;
 
-class RoleController extends Controller
+class RoleController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('can:view_role', only: ['index']),
+            new Middleware('can:create_role', only: ['store']),
+            new Middleware('can:update_role', only: ['update']),
+            new Middleware('can:delete_role', only: ['destroy']),
+        ];
+    }
+
     public function index(Request $request)
     {
-        if ($request->user()->cannot('view_role')) {
-            abort(403);
-        }
+        $roles = Role::all()->load('permissions');
+        $permissions = Permission::all();
 
-        $roles = Role::all();
         return Inertia::render('RolePermission/Role', [
             'roles' => $roles,
+            'permissions' => $permissions
         ]);
     }
 
     public function store(Request $request)
     {
-        if ($request->user()->cannot('create_role')) {
-            abort(403);
-        }
+        $validated = $request->validate([
+            'name' => 'required|unique:roles|max:255',
+        ]);
 
-        $role_name = $request->input('name');
-
-        Role::create(['name' => $role_name]);
+        Role::create(['name' => $validated['name']]);
 
         return back()->with('success', Constants::ROLE_CREATE_SUCCESS);
     }
 
     public function update(Request $request, Role $role)
     {
-        if ($request->user()->cannot('update_role')) {
-            abort(403);
-        }
+        $validated = $request->validate([
+            'name' => 'required|unique:roles|max:255',
+        ]);
 
         $role->update([
-            'name' => $request->input('name')
+            'name' => $validated['name']
         ]);
 
         return back()->with('success', Constants::ROLE_UPDATE_SUCCESS);
     }
 
-    public function destroy(Role $role)
+    public function destroy(Request $request, Role $role)
     {
         $users_with_current_role = User::role($role->name)->get()->count();
 

@@ -35,7 +35,7 @@ class RoleFeatureTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('admin');
 
-        $response = $this->actingAs($user)->get(route('roles.index'));
+        $response = $this->actingAs($user)->get(route('role.index'));
 
         $response->assertOk();
     }
@@ -50,23 +50,24 @@ class RoleFeatureTest extends TestCase
 
         $user->assignRole('user');
 
-        $response = $this->actingAs($user)->get(route('roles.index'));
+        $response = $this->actingAs($user)->get(route('role.index'));
 
         $response->assertStatus(403);
     }
 
-    public function test_all_roles_are_displayed_on_roles_page(): void
+    public function test_all_roles_and_permissions_are_displayed_on_roles_page(): void
     {
         /** @var User $user */
         $user = User::factory()->create();
         $user->assignRole('admin');
 
-        $response = $this->actingAs($user)->get(route('roles.index'));
+        $response = $this->actingAs($user)->get(route('role.index'));
 
 
         $response->assertInertia(function ($page) {
             $page->component('RolePermission/Role') // Check the correct component is being rendered
-                  ->has('roles', 1); // Check that 'roles' has the correct count
+                  ->has('roles', 1) // Check that 'roles' has the correct count
+                  ->has('permissions', 4);
         });
     }
 
@@ -76,12 +77,26 @@ class RoleFeatureTest extends TestCase
         $user = User::factory()->create();
         $user->assignRole('admin');
 
-        $response = $this->actingAs($user)->post(route('roles.store'), [
+        $response = $this->actingAs($user)->post(route('role.store'), [
             'name' => 'new_role'
         ]);
 
         $this->assertCount(2, Role::all());
         $response->assertSessionHas('success', Constants::ROLE_CREATE_SUCCESS);
+    }
+
+    public function test_validate_create_request(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $user->assignRole('admin');
+
+        $response = $this->actingAs($user)->post(route('role.store'), [
+            'name' => ''
+        ]);
+
+        $this->assertCount(1, Role::all());
+        $response->assertSessionHasErrors('name');
     }
 
     public function test_non_admin_cannot_create_a_new_user_role(): void
@@ -94,7 +109,7 @@ class RoleFeatureTest extends TestCase
 
         $user->assignRole('user');
 
-        $response = $this->actingAs($user)->post(route('roles.store'), [
+        $response = $this->actingAs($user)->post(route('role.store'), [
             'name' => 'new_role'
         ]);
 
@@ -111,13 +126,32 @@ class RoleFeatureTest extends TestCase
 
         $this->assertCount(2, Role::all());
 
-        $response = $this->actingAs($user)->put(route('roles.update', ['role' => $role->id]), [
+        $response = $this->actingAs($user)->put(route('role.update', ['role' => $role->id]), [
             'name' => 'updated_role_name'
         ]);
 
         $this->assertCount(2, Role::all());
         $this->assertEquals('updated_role_name', Role::find($role->id)->name);
         $response->assertSessionHas('success', Constants::ROLE_UPDATE_SUCCESS);
+    }
+
+    public function test_validate_update_request(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+        $user->assignRole('admin');
+
+        $role = Role::create(['name' => 'old_name']);
+
+        $this->assertCount(2, Role::all());
+
+        $response = $this->actingAs($user)->put(route('role.update', ['role' => $role->id]), [
+            'name' => ''
+        ]);
+
+        $this->assertCount(2, Role::all());
+        $this->assertEquals('old_name', Role::find($role->id)->name);
+        $response->assertSessionHasErrors('name');
     }
 
     public function test_non_admin_cannot_update_an_existing_user_role(): void
@@ -132,7 +166,7 @@ class RoleFeatureTest extends TestCase
 
         $role = Role::create(['name' => 'old_name']);
 
-        $response = $this->actingAs($user)->put(route('roles.update', ['role' => $role->id]), [
+        $response = $this->actingAs($user)->put(route('role.update', ['role' => $role->id]), [
             'name' => 'updated_role_name'
         ]);
 
@@ -146,7 +180,7 @@ class RoleFeatureTest extends TestCase
         $user->assignRole('admin');
         $admin_role = Role::where('name', 'admin')->first();
 
-        $this->actingAs($user)->put(route('roles.update', ['role' => $admin_role->id]), [
+        $this->actingAs($user)->put(route('role.update', ['role' => $admin_role->id]), [
             'name' => 'new_name'
         ]);
 
@@ -164,7 +198,7 @@ class RoleFeatureTest extends TestCase
 
         $this->assertCount(2, Role::all());
 
-        $response = $this->actingAs($user)->delete(route('roles.destroy', ['role' => $role->id]));
+        $response = $this->actingAs($user)->delete(route('role.destroy', ['role' => $role->id]));
 
         $this->assertCount(1, Role::all());
         $this->assertDatabaseMissing('roles', ['name' => 'old_role']);
@@ -183,7 +217,7 @@ class RoleFeatureTest extends TestCase
 
         $this->assertCount(2, Role::all());
 
-        $response = $this->actingAs($user)->delete(route('roles.destroy', ['role' => $role->id]));
+        $response = $this->actingAs($user)->delete(route('role.destroy', ['role' => $role->id]));
 
         $this->assertCount(2, Role::all());
         $response->assertSessionHas('error', Constants::ROLE_DELETE_ERROR);
