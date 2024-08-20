@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RolePermission\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RolePermission\RoleController;
 use Illuminate\Foundation\Application;
@@ -25,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('role', RoleController::class);
+    Route::resource('permission', PermissionController::class);
 });
 
 require __DIR__.'/auth.php';

@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Policies;
+namespace App\Policies\RolePermission;
 
 use App\Models\User;
 
-class RolePolicy
+class PermissionPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        // return $user->hasPermissionTo('create_role');
         return $user->hasRole('admin');
     }
 
@@ -20,7 +19,7 @@ class RolePolicy
      */
     public function view(User $user): bool
     {
-        return $user->hasPermissionTo('view_role');
+        return $user->hasPermissionTo('view_permission');
     }
 
     /**
@@ -28,7 +27,7 @@ class RolePolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('create_role');
+        return $user->hasPermissionTo('create_permission');
     }
 
     /**
@@ -36,7 +35,7 @@ class RolePolicy
      */
     public function update(User $user): bool
     {
-        return $user->hasPermissionTo('update_role');
+        return $user->hasPermissionTo('update_permission');
     }
 
     /**
@@ -44,6 +43,6 @@ class RolePolicy
      */
     public function delete(User $user): bool
     {
-        return $user->hasPermissionTo('delete_role');
+        return $user->hasPermissionTo('delete_permission');
     }
 }
