@@ -81,7 +81,7 @@ class PermissionFeatureTest extends TestCase
             'name' => 'new_permission'
         ]);
 
-        $this->assertCount(2, Role::all());
+        $this->assertCount(5, Permission::all());
         $response->assertSessionHas('success', Constants::PERMISSION_CREATE_SUCCESS);
     }
 
