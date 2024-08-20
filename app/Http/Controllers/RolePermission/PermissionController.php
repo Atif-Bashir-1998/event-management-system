@@ -24,7 +24,7 @@ class PermissionController extends Controller implements HasMiddleware
         ];
     }
 
-    public function index(Request $request)
+    public function index()
     {
         $roles = Role::all()->load('permissions');
         $permissions = Permission::all();
