@@ -17,4 +17,17 @@ class Constants
     public const PERMISSION_DELETE_SUCCESS = 'Permission has been deleted';
     public const PERMISSION_DELETE_ERROR = 'Can not delete permission';
 
+    public const RESPONSE_MESSAGE = [
+        'ACCESS_CONTROL' => [
+            'ADD_PERMISSION_TO_ROLE_SUCCESS' => 'Permission added to role successfully',
+            'PERMISSION_TO_ROLE_ALREADY_EXIST' => 'Role already has this permission',
+            'REMOVE_PERMISSION_FROM_ROLE_SUCCESS' => 'Permission removed from role successfully',
+            'ROLE_DOES_NOT_HAVE_PERMISSION' => 'Role does not have this permission',
+            'ADD_PERMISSION_TO_USER_SUCCESS' => 'Permission added to user successfully',
+            'PERMISSION_TO_USER_ALREADY_EXIST' => 'User already has this permission',
+            'REMOVE_PERMISSION_FROM_USER_SUCCESS' => 'Permission removed from user successfully',
+            'USER_DOES_NOT_HAVE_PERMISSION' => 'User does not have this permission'
+        ],
+    ];
+
 }
