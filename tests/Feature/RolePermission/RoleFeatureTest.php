@@ -222,4 +222,24 @@ class RoleFeatureTest extends TestCase
         $this->assertCount(2, Role::all());
         $response->assertSessionHas('error', Constants::ROLE_DELETE_ERROR);
     }
+
+    public function test_non_admin_cannot_delete_a_user_role(): void
+    {
+        /** @var User $user */
+        $user = User::factory()->create();
+
+        $user_role = Role::create(['name' => 'user']);
+        $user_role->syncPermissions([]);
+
+        $user->assignRole('user');
+
+        $role = Role::create(['name' => 'old_name']);
+
+        $this->assertCount(3, Role::all());
+
+        $response = $this->actingAs($user)->delete(route('role.destroy', ['role' => $role->id]));
+
+        $this->assertCount(3, Role::all());
+        $response->assertStatus(403);
+    }
 }

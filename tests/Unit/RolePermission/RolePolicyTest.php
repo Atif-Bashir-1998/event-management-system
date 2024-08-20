@@ -3,7 +3,7 @@
 namespace Tests\Unit\RolePermission;
 
 use App\Models\User;
-use App\Policies\RolePolicy;
+use App\Policies\RolePermission\RolePolicy;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
