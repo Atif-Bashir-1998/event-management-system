@@ -19,7 +19,7 @@
     <!-- Backdrop -->
     <Transition name="overlay">
         <div
-            v-show="sidebarStore.getIsSidebarOpen"
+            v-show="sidebarStore.isSidebarOpen"
             class="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center"
             @click="sidebarStore.toggleSidebar"
         ></div>
