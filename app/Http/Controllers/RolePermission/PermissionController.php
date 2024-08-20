@@ -41,7 +41,7 @@ class PermissionController extends Controller implements HasMiddleware
             'name' => 'required|unique:roles|max:255',
         ]);
 
-        Role::create(['name' => $validated['name']]);
+        Permission::create(['name' => $validated['name']]);
 
         return back()->with('success', Constants::PERMISSION_CREATE_SUCCESS);
     }
