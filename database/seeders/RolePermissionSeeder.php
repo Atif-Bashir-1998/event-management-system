@@ -15,15 +15,17 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
         // creating permissions
-        $available_permissions = [
-            'create_role',
-            'update_role',
-            'view_role',
-            'delete_role',
+        $resourceful_features = [
+            'role',
+            'permission'
         ];
 
-        foreach ($available_permissions as $permission) {
-            Permission::create(['name' => $permission]);
+        foreach ($resourceful_features as $feature) {
+            $operations = ['create', 'update', 'view', 'delete'];
+
+            foreach ($operations as $operation) {
+                Permission::create(['name' => $operation . "_" . $feature]);
+            }
         }
 
         // creating basic roles
