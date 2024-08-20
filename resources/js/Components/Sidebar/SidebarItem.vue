@@ -5,7 +5,7 @@
         <Link class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150" :class="isActive
                 ? 'text-primary hover:text-primary-focus'
                 : 'text-base-content hover:text-accent'
-            " :href="route(item.routeName)">
+            " :href="route(item.route)">
             <component :is="item.icon" class="h-5 w-5" />
             <span class="ml-4">{{ item.label }}</span>
         </Link>
@@ -15,19 +15,14 @@
 <script setup lang="ts">
 import { PropType, computed } from "vue";
 import { Link } from "@inertiajs/vue3";
-
-type SidebarItem = {
-    routeName: string;
-    label: string;
-    icon: HTMLElement;
-};
+import { SidebarMenuItem } from "./interfaces";
 
 const props = defineProps({
     item: {
-        type: Object as PropType<SidebarItem>,
+        type: Object as PropType<SidebarMenuItem>,
         required: true,
     },
 });
 
-const isActive = computed(() => route().current(props.item.routeName));
+const isActive = computed(() => route().current(props.item.route));
 </script>

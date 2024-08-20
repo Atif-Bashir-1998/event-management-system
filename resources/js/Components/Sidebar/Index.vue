@@ -11,10 +11,7 @@
                 <img v-else :src="LightLogo" class="h-12 w-auto" />
             </div>
             <ul class="mt-6">
-                <SidebarItem :item="{routeName: 'dashboard', label: 'Dashboard', icon: HomeIcon}" />
-            </ul>
-            <ul>
-                <SidebarItem :item="{routeName: 'role.index', label: 'Role Management', icon: UserGroupIcon}" />
+                <SidebarItem v-for="item in menuItems" :key="item.route" :item="item" />
             </ul>
         </div>
     </aside>
@@ -41,17 +38,14 @@
                     <img v-else :src="LightLogo" class="w-24" />
                 </a>
                 <ul class="mt-6">
-                    <SidebarItem :item="{routeName: 'dashboard', label: 'Dashboard', icon: HomeIcon}" />
-                </ul>
-                <ul>
-                    <SidebarItem :item="{routeName: 'role.index', label: 'Role Management', icon: UserGroupIcon}" />
+                    <SidebarItem v-for="item in menuItems" :key="item.route" :item="item" />
                 </ul>
             </div>
         </aside>
     </Transition>
 </template>
 
-<script setup>
+<script setup lang="ts">
 // import DarkLogo from "@/assets/images/logo/dark-logo.png";
 import DarkLogo from "@/assets/images/logo/vue-laravel.webp";
 import LightLogo from "@/assets/images/logo/vue-laravel.webp";
@@ -63,14 +57,21 @@ import { useSidebarStore } from "@/Stores/sidebar";
 import { useDarkModeStore } from "@/Stores/darkMode";
 import { onMounted } from "vue";
 import SidebarItem from "./SidebarItem.vue"
+import { SidebarMenuItem } from './interfaces/index';
+
 
 const sidebarStore = useSidebarStore();
 const darkModeStore = useDarkModeStore();
 
-
 defineOptions({
     name: 'Sidebar'
 })
+
+const menuItems: SidebarMenuItem[]= [
+    {route: 'dashboard', label: 'Dashboard', icon: HomeIcon},
+    {route: 'role.index', label: 'Role Management', icon: HomeIcon},
+    {route: 'permission.index', label: 'Permission Management', icon: HomeIcon},
+]
 
 onMounted(() => {
     sidebarStore.closeSidebar()
