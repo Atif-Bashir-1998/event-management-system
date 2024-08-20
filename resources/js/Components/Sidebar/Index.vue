@@ -52,6 +52,7 @@ import LightLogo from "@/assets/images/logo/vue-laravel.webp";
 import {
     HomeIcon,
     UserGroupIcon,
+    LockClosedIcon
 } from "@heroicons/vue/24/outline";
 import { useSidebarStore } from "@/Stores/sidebar";
 import { useDarkModeStore } from "@/Stores/darkMode";
@@ -69,8 +70,8 @@ defineOptions({
 
 const menuItems: SidebarMenuItem[]= [
     {route: 'dashboard', label: 'Dashboard', icon: HomeIcon},
-    {route: 'role.index', label: 'Role Management', icon: HomeIcon},
-    {route: 'permission.index', label: 'Permission Management', icon: HomeIcon},
+    {route: 'role.index', label: 'Role Management', icon: UserGroupIcon},
+    {route: 'permission.index', label: 'Permission Management', icon: LockClosedIcon},
 ]
 
 onMounted(() => {
