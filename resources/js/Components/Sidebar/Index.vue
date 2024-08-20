@@ -14,7 +14,7 @@
                 <SidebarItem :item="{routeName: 'dashboard', label: 'Dashboard', icon: HomeIcon}" />
             </ul>
             <ul>
-                <SidebarItem :item="{routeName: 'roles.index', label: 'Role Management', icon: UserGroupIcon}" />
+                <SidebarItem :item="{routeName: 'role.index', label: 'Role Management', icon: UserGroupIcon}" />
             </ul>
         </div>
     </aside>
@@ -44,7 +44,7 @@
                     <SidebarItem :item="{routeName: 'dashboard', label: 'Dashboard', icon: HomeIcon}" />
                 </ul>
                 <ul>
-                    <SidebarItem :item="{routeName: 'roles.index', label: 'Role Management', icon: UserGroupIcon}" />
+                    <SidebarItem :item="{routeName: 'role.index', label: 'Role Management', icon: UserGroupIcon}" />
                 </ul>
             </div>
         </aside>
