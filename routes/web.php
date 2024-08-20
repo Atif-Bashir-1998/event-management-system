@@ -29,10 +29,10 @@ Route::middleware('auth')->group(function () {
     // user-roles related routes
     Route::resource('role', RoleController::class);
     Route::resource('permission', PermissionController::class);
-    Route::post('/roles/{role}/permissions', [AccessControlController::class, 'add_permission_to_role'])->name('role.add-permission');
-    Route::delete('/roles/{role}/permissions', [AccessControlController::class, 'remove_permission_from_role'])->name('role.remove-permission');
-    Route::post('/users/{user}/permissions', [AccessControlController::class, 'add_permission_to_user'])->name('user.add-permission');
-    Route::delete('/users/{user}/permissions', [AccessControlController::class, 'remove_permission_from_user'])->name('user.remove-permission');
+    Route::post('/role/{role}/permissions', [AccessControlController::class, 'add_permission_to_role'])->name('role.add-permission');
+    Route::delete('/role/{role}/permissions', [AccessControlController::class, 'remove_permission_from_role'])->name('role.remove-permission');
+    Route::post('/user/{user}/permissions', [AccessControlController::class, 'add_permission_to_user'])->name('user.add-permission');
+    Route::delete('/user/{user}/permissions', [AccessControlController::class, 'remove_permission_from_user'])->name('user.remove-permission');
     Route::get('/access-control', [AccessControlController::class, 'index'])->name('access-control');
 });
 
