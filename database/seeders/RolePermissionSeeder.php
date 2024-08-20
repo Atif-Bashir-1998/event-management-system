@@ -28,6 +28,19 @@ class RolePermissionSeeder extends Seeder
             }
         }
 
+        // additional permissions
+        $additional_permissions = [
+            'view_access_control',
+            'add_user_permission',
+            'remove_user_permission',
+            'add_role_permission',
+            'remove_role_permission'
+        ];
+
+        foreach ($additional_permissions as $permission) {
+            Permission::create(['name' => $permission]);
+        }
+
         // creating basic roles
         $admin_role = Role::create(['name' => 'admin']);
         Role::create(['name' => 'organizer']);
