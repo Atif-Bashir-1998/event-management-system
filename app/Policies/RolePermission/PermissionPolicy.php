@@ -19,7 +19,7 @@ class PermissionPolicy
      */
     public function view(User $user): bool
     {
-        return $user->hasPermissionTo('view_permission');
+        return $user->hasPermissionTo('view_permission') || $user->hasRole('admin');
     }
 
     /**
@@ -27,7 +27,7 @@ class PermissionPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('create_permission');
+        return $user->hasPermissionTo('create_permission') || $user->hasRole('admin');
     }
 
     /**
@@ -35,7 +35,7 @@ class PermissionPolicy
      */
     public function update(User $user): bool
     {
-        return $user->hasPermissionTo('update_permission');
+        return $user->hasPermissionTo('update_permission') || $user->hasRole('admin');
     }
 
     /**
@@ -43,6 +43,6 @@ class PermissionPolicy
      */
     public function delete(User $user): bool
     {
-        return $user->hasPermissionTo('delete_permission');
+        return $user->hasPermissionTo('delete_permission') || $user->hasRole('admin');
     }
 }
