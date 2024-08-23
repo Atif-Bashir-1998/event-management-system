@@ -4,6 +4,7 @@ use App\Http\Controllers\RolePermission\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RolePermission\AccessControlController;
 use App\Http\Controllers\RolePermission\RoleController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,6 +30,7 @@ Route::middleware('auth')->group(function () {
     // user-roles related routes
     Route::resource('role', RoleController::class);
     Route::resource('permission', PermissionController::class);
+    Route::resource('user', UserController::class);
     Route::post('/role/{role}/permissions', [AccessControlController::class, 'add_permission_to_role'])->name('role.add-permission');
     Route::delete('/role/{role}/permissions', [AccessControlController::class, 'remove_permission_from_role'])->name('role.remove-permission');
     Route::post('/user/{user}/permissions', [AccessControlController::class, 'add_permission_to_user'])->name('user.add-permission');
