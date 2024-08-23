@@ -43,7 +43,7 @@ class PermissionController extends Controller implements HasMiddleware
 
         Permission::create(['name' => $validated['name']]);
 
-        return back()->with('success', Constants::PERMISSION_CREATE_SUCCESS);
+        return back()->with('success', 'Permission has been created');
     }
 
     public function update(Request $request, Permission $permission)
@@ -56,13 +56,13 @@ class PermissionController extends Controller implements HasMiddleware
             'name' => $validated['name']
         ]);
 
-        return back()->with('success', Constants::PERMISSION_UPDATE_SUCCESS);
+        return back()->with('success', 'Permission has been updated');
     }
 
     public function destroy(Permission $permission)
     {
         $permission->delete();
 
-        return back()->with('success', Constants::ROLE_DELETE_SUCCESS);
+        return back()->with('success', 'Permission has been deleted');
     }
 }

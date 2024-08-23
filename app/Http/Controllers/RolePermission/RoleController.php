@@ -43,7 +43,7 @@ class RoleController extends Controller implements HasMiddleware
 
         Role::create(['name' => $validated['name']]);
 
-        return back()->with('success', Constants::ROLE_CREATE_SUCCESS);
+        return back()->with('success', 'Role has been created');
     }
 
     public function update(Request $request, Role $role)
@@ -56,7 +56,7 @@ class RoleController extends Controller implements HasMiddleware
             'name' => $validated['name']
         ]);
 
-        return back()->with('success', Constants::ROLE_UPDATE_SUCCESS);
+        return back()->with('success', 'Role has been updated');
     }
 
     public function destroy(Request $request, Role $role)
@@ -64,11 +64,11 @@ class RoleController extends Controller implements HasMiddleware
         $users_with_current_role = User::role($role->name)->get()->count();
 
         if ($users_with_current_role) {
-            return back()->with('error', Constants::ROLE_DELETE_ERROR);
+            return back()->with('error', 'Can not delete role with existing users');
         }
 
         $role->delete();
 
-        return back()->with('success', Constants::ROLE_DELETE_SUCCESS);
+        return back()->with('success', 'Role has been deleted');
     }
 }

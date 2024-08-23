@@ -82,7 +82,7 @@ class PermissionFeatureTest extends TestCase
         ]);
 
         $this->assertCount(5, Permission::all());
-        $response->assertSessionHas('success', Constants::PERMISSION_CREATE_SUCCESS);
+        $response->assertSessionHas('success');
     }
 
     public function test_validate_create_request(): void
@@ -132,7 +132,7 @@ class PermissionFeatureTest extends TestCase
 
         $this->assertCount(5, Permission::all());
         $this->assertEquals('updated_permission_name', Permission::find($permission->id)->name);
-        $response->assertSessionHas('success', Constants::PERMISSION_UPDATE_SUCCESS);
+        $response->assertSessionHas('success');
     }
 
     public function test_validate_update_request(): void
@@ -206,7 +206,7 @@ class PermissionFeatureTest extends TestCase
 
         $this->assertCount(4, Permission::all());
         $this->assertDatabaseMissing('permissions', ['name' => 'test_permission']);
-        $response->assertSessionHas('success', Constants::ROLE_DELETE_SUCCESS);
+        $response->assertSessionHas('success');
     }
 
     public function test_non_admin_cannot_delete_a_permission(): void

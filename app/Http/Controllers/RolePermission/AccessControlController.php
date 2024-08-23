@@ -44,12 +44,12 @@ class AccessControlController extends Controller implements HasMiddleware
         $permission = Permission::findByName($request->input('permission'));
 
         if ($role->hasPermissionTo($permission)) {
-            return back()->with('error', Constants::RESPONSE_MESSAGE['ACCESS_CONTROL']['PERMISSION_TO_ROLE_ALREADY_EXIST']);
+            return back()->with('error', 'Role already has this permission');
         }
 
         $role->givePermissionTo($permission);
 
-        return back()->with('success', Constants::RESPONSE_MESSAGE['ACCESS_CONTROL']['ADD_PERMISSION_TO_ROLE_SUCCESS']);
+        return back()->with('success', 'Permission added to role successfully');
     }
 
     /**
@@ -60,12 +60,12 @@ class AccessControlController extends Controller implements HasMiddleware
         $permission = Permission::findByName($request->input('permission'));
 
         if (!$role->hasPermissionTo($permission)) {
-            return back()->with('error', Constants::RESPONSE_MESSAGE['ACCESS_CONTROL']['ROLE_DOES_NOT_HAVE_PERMISSION']);
+            return back()->with('error', 'Role does not have this permission');
         }
 
         $role->revokePermissionTo($permission);
 
-        return back()->with('success', Constants::RESPONSE_MESSAGE['ACCESS_CONTROL']['REMOVE_PERMISSION_FROM_ROLE_SUCCESS']);
+        return back()->with('success', 'Permission removed from role successfully');
     }
 
     /**
@@ -76,12 +76,12 @@ class AccessControlController extends Controller implements HasMiddleware
         $permission = Permission::findByName($request->input('permission'));
 
         if ($user->hasPermissionTo($permission)) {
-            return back()->with('error', Constants::RESPONSE_MESSAGE['ACCESS_CONTROL']['PERMISSION_TO_USER_ALREADY_EXIST']);
+            return back()->with('error', 'User already has this permission');
         }
 
         $user->givePermissionTo($permission);
 
-        return back()->with('success', Constants::RESPONSE_MESSAGE['ACCESS_CONTROL']['ADD_PERMISSION_TO_USER_SUCCESS']);
+        return back()->with('success', 'Permission added to user successfully');
     }
 
     /**
@@ -92,11 +92,11 @@ class AccessControlController extends Controller implements HasMiddleware
         $permission = Permission::findByName($request->input('permission'));
 
         if (!$user->hasPermissionTo($permission)) {
-            return back()->with('error', Constants::RESPONSE_MESSAGE['ACCESS_CONTROL']['USER_DOES_NOT_HAVE_PERMISSION']);
+            return back()->with('error', 'User does not have this permission');
         }
 
         $user->revokePermissionTo($permission);
 
-        return back()->with('success', Constants::RESPONSE_MESSAGE['ACCESS_CONTROL']['REMOVE_PERMISSION_FROM_USER_SUCCESS']);
+        return back()->with('success', 'Permission removed from user successfully');
     }
 }

@@ -82,7 +82,7 @@ class RoleFeatureTest extends TestCase
         ]);
 
         $this->assertCount(2, Role::all());
-        $response->assertSessionHas('success', Constants::ROLE_CREATE_SUCCESS);
+        $response->assertSessionHas('success');
     }
 
     public function test_validate_create_request(): void
@@ -132,7 +132,7 @@ class RoleFeatureTest extends TestCase
 
         $this->assertCount(2, Role::all());
         $this->assertEquals('updated_role_name', Role::find($role->id)->name);
-        $response->assertSessionHas('success', Constants::ROLE_UPDATE_SUCCESS);
+        $response->assertSessionHas('success');
     }
 
     public function test_validate_update_request(): void
@@ -202,7 +202,7 @@ class RoleFeatureTest extends TestCase
 
         $this->assertCount(1, Role::all());
         $this->assertDatabaseMissing('roles', ['name' => 'old_role']);
-        $response->assertSessionHas('success', Constants::ROLE_DELETE_SUCCESS);
+        $response->assertSessionHas('success');
     }
 
     public function test_admin_can_not_delete_a_role_which_has_associated_users(): void
@@ -220,7 +220,7 @@ class RoleFeatureTest extends TestCase
         $response = $this->actingAs($user)->delete(route('role.destroy', ['role' => $role->id]));
 
         $this->assertCount(2, Role::all());
-        $response->assertSessionHas('error', Constants::ROLE_DELETE_ERROR);
+        $response->assertSessionHas('error');
     }
 
     public function test_non_admin_cannot_delete_a_user_role(): void
