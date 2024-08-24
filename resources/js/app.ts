@@ -9,6 +9,7 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import { createPinia } from 'pinia'
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import 'vue-select/dist/vue-select.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
