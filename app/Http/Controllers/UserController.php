@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller implements HasMiddleware
@@ -26,10 +26,21 @@ class UserController extends Controller implements HasMiddleware
 
     public function index()
     {
-        $users = User::all();
+        $users = User::with(['roles.permissions', 'permissions'])->get();
+        $roles = Role::all();
+        $permissions = Permission::all();
+
+        $users = $users->map(function ($user) use ($permissions) {
+            $user->highest_role = $user->highest_role() ? $user->highest_role()->name : null;
+
+            $user->unassigned_permissions = $permissions->diff($user->getAllPermissions());
+            return $user;
+        });
 
         return Inertia::render('User/Index', [
             'users' => $users,
+            'roles' => $roles,
+            'permissions' => $permissions
         ]);
     }
 
@@ -76,9 +87,9 @@ class UserController extends Controller implements HasMiddleware
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|unique:users',
+            'email' => "required|string|unique:users,email,$user->id", // Exclude the current user's email from the unique check
             'is_email_verified' => 'boolean',
-            'password' => 'required|string',
+            'password' => 'nullable|string|min:6', // Validate password only if it's present
             'roles' => 'sometimes|array', // Expect an array of roles
             'roles.*' => 'string' // Each item in the roles array must be a string
         ]);
@@ -105,7 +116,7 @@ class UserController extends Controller implements HasMiddleware
             'name' => $validated['name'],
             'email' => $validated['email'],
             'email_verified_at' => $validated['is_email_verified'] ? now() : null,
-            'password' => Hash::make($validated['password'])
+            'password' => $request->filled('password') ? Hash::make($validated['password']) : $user->password, // Update password only if provided
         ]);
 
         return back()->with('success', 'User updated successfully');
