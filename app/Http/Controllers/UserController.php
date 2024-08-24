@@ -40,14 +40,23 @@ class UserController extends Controller implements HasMiddleware
             'email' => 'required|string|unique:users',
             'is_email_verified' => 'boolean',
             'password' => 'required|string',
-            'role' => 'sometimes|string'
+            'roles' => 'sometimes|array', // Expect an array of roles
+            'roles.*' => 'string' // Each item in the roles array must be a string
         ]);
 
-        // check the role of current user, superior role than current role can not be created
-        $new_user_role = Role::findByName($validated['role']);
-        if(!$this->has_sufficient_role_level($request->user(), $new_user_role))
-        {
-            return back()->with('error', 'You do not have permission to assign a role superior to your own.');
+        $current_user = $request->user();
+
+        // Check each role in the array
+        foreach ($validated['roles'] as $role_name) {
+            $role = Role::findByName($role_name);
+
+            if (!$role) {
+                return back()->with('error', "The role {$role_name} does not exist.");
+            }
+
+            if (!$this->has_sufficient_role_level($current_user, $role)) {
+                return back()->with('error', 'You do not have permission to assign a role superior to your own.');
+            }
         }
 
         $user = User::create([
@@ -57,7 +66,8 @@ class UserController extends Controller implements HasMiddleware
             'password' => Hash::make($validated['password'])
         ]);
 
-        $user->assignRole($validated['role']);
+        // Remove all previous roles and assign new roles
+        $user->syncRoles($validated['roles']);
 
         return back()->with('success', 'User created successfully');
     }
@@ -69,15 +79,27 @@ class UserController extends Controller implements HasMiddleware
             'email' => 'required|string|unique:users',
             'is_email_verified' => 'boolean',
             'password' => 'required|string',
-            'role' => 'sometimes|string'
+            'roles' => 'sometimes|array', // Expect an array of roles
+            'roles.*' => 'string' // Each item in the roles array must be a string
         ]);
 
-        // check the role of current user, superior role can not be alloted
-        $updated_user_role = Role::findByName($validated['role']);
-        if(!$this->has_sufficient_role_level($request->user(), $updated_user_role))
-        {
-            return back()->with('error', 'You do not have permission to assign a role superior to your own.');
+        $current_user = $request->user();
+
+        // Check each role in the array
+        foreach ($validated['roles'] as $role_name) {
+            $role = Role::findByName($role_name);
+
+            if (!$role) {
+                return back()->with('error', "The role {$role_name} does not exist.");
+            }
+
+            if (!$this->has_sufficient_role_level($current_user, $role)) {
+                return back()->with('error', 'You do not have permission to assign a role superior to your own.');
+            }
         }
+
+        // Remove all previous roles and assign new roles
+        $user->syncRoles($validated['roles']);
 
         $user->update([
             'name' => $validated['name'],
@@ -85,8 +107,6 @@ class UserController extends Controller implements HasMiddleware
             'email_verified_at' => $validated['is_email_verified'] ? now() : null,
             'password' => Hash::make($validated['password'])
         ]);
-
-        $user->syncRoles([$validated['role']]);
 
         return back()->with('success', 'User updated successfully');
     }

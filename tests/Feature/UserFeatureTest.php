@@ -92,7 +92,10 @@ class UserFeatureTest extends TestCase
             'email' => 'test@email.com',
             'is_email_verified' => true,
             'password' => 'secret-password',
-            'role' => RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
+            'roles' => [
+                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE'],
+                RolePermissionConstants::DEFAULT_ROLES['ORGANIZER'],
+            ]
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -120,7 +123,9 @@ class UserFeatureTest extends TestCase
             'email' => 'test@email.com',
             'is_email_verified' => true,
             'password' => 'secret-password',
-            'role' => RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
+            'roles' => [
+                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE'],
+            ]
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -140,7 +145,9 @@ class UserFeatureTest extends TestCase
             'email' => 'test@email.com',
             'is_email_verified' => true,
             'password' => 'secret-password',
-            'role' => RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
+            'roles' => [
+                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
+            ]
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -167,7 +174,9 @@ class UserFeatureTest extends TestCase
             'email' => 'test@email.com',
             'is_email_verified' => true,
             'password' => 'secret-password',
-            'role' => RolePermissionConstants::DEFAULT_ROLES['ORGANIZER']
+            'roles' => [
+                RolePermissionConstants::DEFAULT_ROLES['ORGANIZER']
+            ]
         ]);
 
         $response->assertSessionHas('error');
@@ -186,7 +195,9 @@ class UserFeatureTest extends TestCase
             'email' => 'test@email.com',
             'is_email_verified' => true,
             'password' => 'secret-password',
-            'role' => RolePermissionConstants::DEFAULT_ROLES['ORGANIZER']
+            'roles' => [
+                RolePermissionConstants::DEFAULT_ROLES['ORGANIZER']
+            ]
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -214,7 +225,9 @@ class UserFeatureTest extends TestCase
             'email' => 'testupdated@email.com',
             'is_email_verified' => true,
             'password' => 'secret-password-updated',
-            'role' => RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
+            'roles' => [
+                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
+            ]
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -249,7 +262,9 @@ class UserFeatureTest extends TestCase
             'email' => 'testupdated@email.com',
             'is_email_verified' => true,
             'password' => 'secret-password-updated',
-            'role' => RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
+            'roles' => [
+                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
+            ]
         ]);
 
         $response->assertStatus(403);
@@ -276,7 +291,9 @@ class UserFeatureTest extends TestCase
             'email' => 'testupdated@email.com',
             'is_email_verified' => true,
             'password' => 'secret-password-updated',
-            'role' => RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
+            'roles' => [
+                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
+            ]
         ]);
 
         $response->assertSessionHasNoErrors();
