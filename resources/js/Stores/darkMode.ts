@@ -12,12 +12,12 @@ export const useDarkModeStore = defineStore('darkMode', () => {
   }
 
   function implementChange() {
-    const htmlElement = document.documentElement;
+    const htmlElement = document.documentElement
 
     if (darkMode.value) {
-        htmlElement.dataset.theme = "dark";
+      htmlElement.dataset.theme = 'dark'
     } else {
-        htmlElement.dataset.theme = "light";
+      htmlElement.dataset.theme = 'light'
     }
   }
 

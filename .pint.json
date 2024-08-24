@@ -1,8 +1,8 @@
 {
-    "preset": "laravel",
-    "rules": {
-        "array_syntax": {
-            "syntax": "short"
-        }
+  "preset": "laravel",
+  "rules": {
+    "array_syntax": {
+      "syntax": "short"
     }
+  }
 }
