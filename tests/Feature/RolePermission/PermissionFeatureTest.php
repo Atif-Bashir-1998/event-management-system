@@ -5,7 +5,6 @@ namespace Tests\Feature\RolePermission;
 use App\Constants\RolePermission\Constants;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -24,7 +23,9 @@ class PermissionFeatureTest extends TestCase
         Permission::create(['name' => 'update_permission']);
         Permission::create(['name' => 'delete_permission']);
 
-        $admin_role = Role::create(['name' => 'admin']);
+        $admin_role = Role::create(['name' => Constants::DEFAULT_ROLES['ADMIN']]);
+        Role::create(['name' => Constants::DEFAULT_ROLES['ORGANIZER']]);
+        Role::create(['name' => Constants::DEFAULT_ROLES['ATTENDEE']]);
 
         $admin_role->syncPermissions(Permission::all());
     }
@@ -33,7 +34,7 @@ class PermissionFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->get(route('permission.index'));
 
@@ -48,7 +49,7 @@ class PermissionFeatureTest extends TestCase
         $user_role = Role::create(['name' => 'user']);
         $user_role->syncPermissions([]);
 
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $response = $this->actingAs($user)->get(route('permission.index'));
 
@@ -59,14 +60,14 @@ class PermissionFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->get(route('permission.index'));
 
 
         $response->assertInertia(function ($page) {
             $page->component('RolePermission/Permission') // Check the correct component is being rendered
-                  ->has('roles', 1) // Check that 'roles' has the correct count
+                  ->has('roles', 3) // Check that 'roles' has the correct count
                   ->has('permissions', 4);
         });
     }
@@ -75,7 +76,7 @@ class PermissionFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->post(route('permission.store'), [
             'name' => 'new_permission'
@@ -89,13 +90,13 @@ class PermissionFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->post(route('permission.store'), [
             'name' => ''
         ]);
 
-        $this->assertCount(1, Role::all());
+        $this->assertCount(4, Permission::all());
         $response->assertSessionHasErrors('name');
     }
 
@@ -107,7 +108,7 @@ class PermissionFeatureTest extends TestCase
         $user_role = Role::create(['name' => 'user']);
         $user_role->syncPermissions([]);
 
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $response = $this->actingAs($user)->post(route('permission.store'), [
             'name' => 'new_permission'
@@ -120,7 +121,7 @@ class PermissionFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $permission = Permission::create(['name' => 'old_permission']);
 
@@ -139,7 +140,7 @@ class PermissionFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $permission = Permission::create(['name' => 'old_permission']);
 
@@ -158,11 +159,7 @@ class PermissionFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-
-        $user_role = Role::create(['name' => 'user']);
-        $user_role->syncPermissions([]);
-
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $role = Role::create(['name' => 'old_name']);
 
@@ -177,8 +174,7 @@ class PermissionFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
-        $admin_role = Role::where('name', 'admin')->first();
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $permission = Permission::create(['name' => 'old_permission']);
 
@@ -196,7 +192,7 @@ class PermissionFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $permission = Permission::create(['name' => 'test_permission']);
 
@@ -213,11 +209,7 @@ class PermissionFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-
-        $user_role = Role::create(['name' => 'user']);
-        $user_role->syncPermissions([]);
-
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $permission = Permission::create(['name' => 'test_permission']);
 

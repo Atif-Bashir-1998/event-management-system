@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\RolePermission;
 
+use App\Constants\RolePermission\Constants;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
@@ -23,7 +24,7 @@ class AccessControlFeatureTest extends TestCase
         Permission::create(['name' => 'add_role_permission']);
         Permission::create(['name' => 'remove_role_permission']);
 
-        $admin_role = Role::create(['name' => 'admin']);
+        $admin_role = Role::create(['name' => Constants::DEFAULT_ROLES['ADMIN']]);
 
         $admin_role->syncPermissions(Permission::all());
     }
@@ -32,7 +33,7 @@ class AccessControlFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->get(route('access-control'));
 
@@ -64,7 +65,7 @@ class AccessControlFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $new_role = Role::create(['name' => 'new_role']);
         $new_permission = Permission::create(['name' => 'new_permission']);
@@ -111,7 +112,7 @@ class AccessControlFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $new_role = Role::create(['name' => 'new_role']);
         $new_permission = Permission::create(['name' => 'new_permission']);
@@ -164,7 +165,7 @@ class AccessControlFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
         $other_user = User::factory()->create();
 
         $new_permission = Permission::create(['name' => 'new_permission']);
@@ -213,7 +214,7 @@ class AccessControlFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $other_user = User::factory()->create();
         $new_permission = Permission::create(['name' => 'new_permission']);

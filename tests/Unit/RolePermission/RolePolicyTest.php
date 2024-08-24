@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\RolePermission;
 
+use App\Constants\RolePermission\Constants;
 use App\Models\User;
 use App\Policies\RolePermission\RolePolicy;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,8 +25,8 @@ class RolePolicyTest extends TestCase
         Permission::create(['name' => 'update_role']);
         Permission::create(['name' => 'delete_role']);
 
-        $admin_role = Role::create(['name' => 'admin']);
-        Role::create(['name' => 'user']);
+        $admin_role = Role::create(['name' => Constants::DEFAULT_ROLES['ADMIN']]);
+        Role::create(['name' => Constants::DEFAULT_ROLES['ORGANIZER']]);
 
         $admin_role->syncPermissions(Permission::all());
 
@@ -35,7 +36,7 @@ class RolePolicyTest extends TestCase
     public function test_user_with_admin_role_view_any_roles(): void
     {
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $this->assertTrue($this->policy->viewAny($user));
     }
@@ -43,7 +44,7 @@ class RolePolicyTest extends TestCase
     public function test_user_without_view_role_permission_cannot_view_roles()
     {
         $user = User::factory()->create();
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $this->assertFalse($this->policy->view($user));
     }
@@ -51,7 +52,7 @@ class RolePolicyTest extends TestCase
     public function test_user_with_admin_role_create_new_role()
     {
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $this->assertTrue($this->policy->create($user));
     }
@@ -59,7 +60,7 @@ class RolePolicyTest extends TestCase
     public function test_user_with_create_permission_create_new_role()
     {
         $user = User::factory()->create();
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
         $user->givePermissionTo('create_role');
 
         $this->assertTrue($this->policy->create($user));
@@ -68,7 +69,7 @@ class RolePolicyTest extends TestCase
     public function test_user_without_create_permission_cannot_create_new_role()
     {
         $user = User::factory()->create();
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $this->assertFalse($this->policy->create($user));
     }
@@ -76,7 +77,7 @@ class RolePolicyTest extends TestCase
     public function test_user_with_admin_role_update_a_role()
     {
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $this->assertTrue($this->policy->update($user));
     }
@@ -84,7 +85,7 @@ class RolePolicyTest extends TestCase
     public function test_user_with_update_permission_update_a_role()
     {
         $user = User::factory()->create();
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
         $user->givePermissionTo('update_role');
 
         $this->assertTrue($this->policy->update($user));
@@ -93,7 +94,7 @@ class RolePolicyTest extends TestCase
     public function test_user_without_update_permission_cannot_update_a_role()
     {
         $user = User::factory()->create();
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $this->assertFalse($this->policy->update($user));
     }
@@ -101,7 +102,7 @@ class RolePolicyTest extends TestCase
     public function test_user_with_admin_role_delete_a_role()
     {
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $this->assertTrue($this->policy->delete($user));
     }
@@ -109,7 +110,7 @@ class RolePolicyTest extends TestCase
     public function test_user_with_delete_permission_delete_a_role()
     {
         $user = User::factory()->create();
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
         $user->givePermissionTo('delete_role');
 
         $this->assertTrue($this->policy->delete($user));
@@ -118,7 +119,7 @@ class RolePolicyTest extends TestCase
     public function test_user_without_delete_permission_cannot_delete_a_role()
     {
         $user = User::factory()->create();
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $this->assertFalse($this->policy->delete($user));
     }

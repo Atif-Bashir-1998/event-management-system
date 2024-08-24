@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\RolePermission;
 
+use App\Constants\RolePermission\Constants;
 use App\Models\User;
 use App\Policies\RolePermission\PermissionPolicy;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,8 +25,7 @@ class PermissionPolicyTest extends TestCase
         Permission::create(['name' => 'update_permission']);
         Permission::create(['name' => 'delete_permission']);
 
-        $admin_role = Role::create(['name' => 'admin']);
-        Role::create(['name' => 'user']);
+        $admin_role = Role::create(['name' => Constants::DEFAULT_ROLES['ADMIN']]);
 
         $admin_role->syncPermissions(Permission::all());
 
@@ -35,7 +35,7 @@ class PermissionPolicyTest extends TestCase
     public function test_user_with_admin_role_view_any_permission(): void
     {
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $this->assertTrue($this->policy->viewAny($user));
     }
@@ -58,7 +58,7 @@ class PermissionPolicyTest extends TestCase
     public function test_user_with_admin_role_create_new_permission()
     {
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $this->assertTrue($this->policy->create($user));
     }
@@ -81,7 +81,7 @@ class PermissionPolicyTest extends TestCase
     public function test_user_with_admin_role_update_a_permission()
     {
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $this->assertTrue($this->policy->update($user));
     }
@@ -104,7 +104,7 @@ class PermissionPolicyTest extends TestCase
     public function test_user_with_admin_role_delete_a_permission()
     {
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $this->assertTrue($this->policy->delete($user));
     }

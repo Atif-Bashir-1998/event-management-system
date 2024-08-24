@@ -24,7 +24,9 @@ class RoleFeatureTest extends TestCase
         Permission::create(['name' => 'update_role']);
         Permission::create(['name' => 'delete_role']);
 
-        $admin_role = Role::create(['name' => 'admin']);
+        $admin_role = Role::create(['name' => Constants::DEFAULT_ROLES['ADMIN']]);
+        Role::create(['name' => Constants::DEFAULT_ROLES['ORGANIZER']]);
+        Role::create(['name' => Constants::DEFAULT_ROLES['ATTENDEE']]);
 
         $admin_role->syncPermissions(Permission::all());
     }
@@ -33,7 +35,7 @@ class RoleFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->get(route('role.index'));
 
@@ -45,10 +47,7 @@ class RoleFeatureTest extends TestCase
         /** @var User $user */
         $user = User::factory()->create();
 
-        $user_role = Role::create(['name' => 'user']);
-        $user_role->syncPermissions([]);
-
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $response = $this->actingAs($user)->get(route('role.index'));
 
@@ -59,14 +58,13 @@ class RoleFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->get(route('role.index'));
 
-
         $response->assertInertia(function ($page) {
             $page->component('RolePermission/Role') // Check the correct component is being rendered
-                  ->has('roles', 1) // Check that 'roles' has the correct count
+                  ->has('roles', 3) // Check that 'roles' has the correct count
                   ->has('permissions', 4);
         });
     }
@@ -75,13 +73,13 @@ class RoleFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->post(route('role.store'), [
             'name' => 'new_role'
         ]);
 
-        $this->assertCount(2, Role::all());
+        $this->assertCount(4, Role::all());
         $response->assertSessionHas('success');
     }
 
@@ -89,13 +87,13 @@ class RoleFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->post(route('role.store'), [
             'name' => ''
         ]);
 
-        $this->assertCount(1, Role::all());
+        $this->assertCount(3, Role::all());
         $response->assertSessionHasErrors('name');
     }
 
@@ -104,10 +102,7 @@ class RoleFeatureTest extends TestCase
         /** @var User $user */
         $user = User::factory()->create();
 
-        $user_role = Role::create(['name' => 'user']);
-        $user_role->syncPermissions([]);
-
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $response = $this->actingAs($user)->post(route('role.store'), [
             'name' => 'new_role'
@@ -120,17 +115,17 @@ class RoleFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $role = Role::create(['name' => 'old_name']);
 
-        $this->assertCount(2, Role::all());
+        $this->assertCount(4, Role::all());
 
         $response = $this->actingAs($user)->put(route('role.update', ['role' => $role->id]), [
             'name' => 'updated_role_name'
         ]);
 
-        $this->assertCount(2, Role::all());
+        $this->assertCount(4, Role::all());
         $this->assertEquals('updated_role_name', Role::find($role->id)->name);
         $response->assertSessionHas('success');
     }
@@ -139,17 +134,17 @@ class RoleFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $role = Role::create(['name' => 'old_name']);
 
-        $this->assertCount(2, Role::all());
+        $this->assertCount(4, Role::all());
 
         $response = $this->actingAs($user)->put(route('role.update', ['role' => $role->id]), [
             'name' => ''
         ]);
 
-        $this->assertCount(2, Role::all());
+        $this->assertCount(4, Role::all());
         $this->assertEquals('old_name', Role::find($role->id)->name);
         $response->assertSessionHasErrors('name');
     }
@@ -159,10 +154,7 @@ class RoleFeatureTest extends TestCase
         /** @var User $user */
         $user = User::factory()->create();
 
-        $user_role = Role::create(['name' => 'user']);
-        $user_role->syncPermissions([]);
-
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $role = Role::create(['name' => 'old_name']);
 
@@ -177,7 +169,7 @@ class RoleFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
         $admin_role = Role::where('name', 'admin')->first();
 
         $this->actingAs($user)->put(route('role.update', ['role' => $admin_role->id]), [
@@ -192,15 +184,15 @@ class RoleFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $role = Role::create(['name' => 'old_role']);
 
-        $this->assertCount(2, Role::all());
+        $this->assertCount(4, Role::all());
 
         $response = $this->actingAs($user)->delete(route('role.destroy', ['role' => $role->id]));
 
-        $this->assertCount(1, Role::all());
+        $this->assertCount(3, Role::all());
         $this->assertDatabaseMissing('roles', ['name' => 'old_role']);
         $response->assertSessionHas('success');
     }
@@ -209,17 +201,17 @@ class RoleFeatureTest extends TestCase
     {
         /** @var User $user */
         $user = User::factory()->create();
-        $user->assignRole('admin');
-        $role = Role::create(['name' => 'test_role']);
+        $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
+        $role = Role::create(['name' => 'test_role']);
         $test_user = User::factory()->create();
         $test_user->assignRole('test_role');
 
-        $this->assertCount(2, Role::all());
+        $this->assertCount(4, Role::all());
 
-        $response = $this->actingAs($user)->delete(route('role.destroy', ['role' => $role->id]));
+        $response = $this->actingAs($user)->delete(route('role.destroy', ['role' => $role]));
 
-        $this->assertCount(2, Role::all());
+        $this->assertCount(4, Role::all());
         $response->assertSessionHas('error');
     }
 
@@ -228,18 +220,15 @@ class RoleFeatureTest extends TestCase
         /** @var User $user */
         $user = User::factory()->create();
 
-        $user_role = Role::create(['name' => 'user']);
-        $user_role->syncPermissions([]);
-
-        $user->assignRole('user');
+        $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $role = Role::create(['name' => 'old_name']);
 
-        $this->assertCount(3, Role::all());
+        $this->assertCount(4, Role::all());
 
-        $response = $this->actingAs($user)->delete(route('role.destroy', ['role' => $role->id]));
+        $response = $this->actingAs($user)->delete(route('role.destroy', ['role' => $role]));
 
-        $this->assertCount(3, Role::all());
+        $this->assertCount(4, Role::all());
         $response->assertStatus(403);
     }
 }
