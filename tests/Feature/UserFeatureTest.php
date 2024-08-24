@@ -2,15 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Constants\RolePermission\Constants as RolePermissionConstants;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
-use App\Constants\RolePermission\Constants as RolePermissionConstants;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 
 class UserFeatureTest extends TestCase
 {
@@ -74,10 +73,9 @@ class UserFeatureTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('user.index'));
 
-
         $response->assertInertia(function ($page) {
             $page->component('User/Index') // Check the correct component is being rendered
-                  ->has('users', 6); // Check that 'users' has the correct count
+                ->has('users', 6); // Check that 'users' has the correct count
         });
     }
 
@@ -95,7 +93,7 @@ class UserFeatureTest extends TestCase
             'roles' => [
                 RolePermissionConstants::DEFAULT_ROLES['ATTENDEE'],
                 RolePermissionConstants::DEFAULT_ROLES['ORGANIZER'],
-            ]
+            ],
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -125,7 +123,7 @@ class UserFeatureTest extends TestCase
             'password' => 'secret-password',
             'roles' => [
                 RolePermissionConstants::DEFAULT_ROLES['ATTENDEE'],
-            ]
+            ],
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -146,8 +144,8 @@ class UserFeatureTest extends TestCase
             'is_email_verified' => true,
             'password' => 'secret-password',
             'roles' => [
-                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
-            ]
+                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE'],
+            ],
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -175,8 +173,8 @@ class UserFeatureTest extends TestCase
             'is_email_verified' => true,
             'password' => 'secret-password',
             'roles' => [
-                RolePermissionConstants::DEFAULT_ROLES['ORGANIZER']
-            ]
+                RolePermissionConstants::DEFAULT_ROLES['ORGANIZER'],
+            ],
         ]);
 
         $response->assertSessionHas('error');
@@ -196,8 +194,8 @@ class UserFeatureTest extends TestCase
             'is_email_verified' => true,
             'password' => 'secret-password',
             'roles' => [
-                RolePermissionConstants::DEFAULT_ROLES['ORGANIZER']
-            ]
+                RolePermissionConstants::DEFAULT_ROLES['ORGANIZER'],
+            ],
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -226,8 +224,8 @@ class UserFeatureTest extends TestCase
             'is_email_verified' => true,
             'password' => 'secret-password-updated',
             'roles' => [
-                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
-            ]
+                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE'],
+            ],
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -246,16 +244,15 @@ class UserFeatureTest extends TestCase
     public function test_user_without_permission_can_not_update_a_user(): void
     {
         /** @var User $user */
-        $user = User::factory()->create();;
+        $user = User::factory()->create();
 
         $test_user = User::factory()->create([
             'id' => 2,
             'name' => 'Test',
             'email' => 'test@email.com',
             'password' => 'secret-password',
-            'email_verified_at' => null
+            'email_verified_at' => null,
         ]);
-
 
         $response = $this->actingAs($user)->put(route('user.update', ['user' => $test_user->id]), [
             'name' => 'TestUpdated',
@@ -263,8 +260,8 @@ class UserFeatureTest extends TestCase
             'is_email_verified' => true,
             'password' => 'secret-password-updated',
             'roles' => [
-                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
-            ]
+                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE'],
+            ],
         ]);
 
         $response->assertStatus(403);
@@ -283,7 +280,7 @@ class UserFeatureTest extends TestCase
             'name' => 'Test',
             'email' => 'test@email.com',
             'password' => 'secret-password',
-            'email_verified_at' => null
+            'email_verified_at' => null,
         ]);
 
         $response = $this->actingAs($user)->put(route('user.update', ['user' => $test_user->id]), [
@@ -292,8 +289,8 @@ class UserFeatureTest extends TestCase
             'is_email_verified' => true,
             'password' => 'secret-password-updated',
             'roles' => [
-                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE']
-            ]
+                RolePermissionConstants::DEFAULT_ROLES['ATTENDEE'],
+            ],
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -321,7 +318,7 @@ class UserFeatureTest extends TestCase
 
         Log::info(json_encode([
             'user' => $user->highest_role(),
-            'test' => $test_user->highest_role()
+            'test' => $test_user->highest_role(),
         ]));
 
         $response->assertSessionHasNoErrors();
@@ -333,7 +330,7 @@ class UserFeatureTest extends TestCase
     public function test_user_without_permission_can_not_delete_a_user(): void
     {
         /** @var User $user */
-        $user = User::factory()->create();;
+        $user = User::factory()->create();
 
         $test_user = User::factory()->create();
 

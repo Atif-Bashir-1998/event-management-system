@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\RolePermission;
 
-use App\Constants\RolePermission\Constants;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -32,13 +31,13 @@ class AccessControlController extends Controller implements HasMiddleware
 
         return Inertia::render('RolePermission/AccessControl', [
             'roles' => $roles,
-            'permissions' => $permissions
+            'permissions' => $permissions,
         ]);
     }
 
     /**
      * Add a permission to a role.
-    */
+     */
     public function add_permission_to_role(Request $request, Role $role)
     {
         $permission = Permission::findByName($request->input('permission'));
@@ -54,12 +53,12 @@ class AccessControlController extends Controller implements HasMiddleware
 
     /**
      * Remove a permission from a role.
-    */
+     */
     public function remove_permission_from_role(Request $request, Role $role)
     {
         $permission = Permission::findByName($request->input('permission'));
 
-        if (!$role->hasPermissionTo($permission)) {
+        if (! $role->hasPermissionTo($permission)) {
             return back()->with('error', 'Role does not have this permission');
         }
 
@@ -70,7 +69,7 @@ class AccessControlController extends Controller implements HasMiddleware
 
     /**
      * Add a permission to a user.
-    */
+     */
     public function add_permission_to_user(Request $request, User $user)
     {
         $permission = Permission::findByName($request->input('permission'));
@@ -86,12 +85,12 @@ class AccessControlController extends Controller implements HasMiddleware
 
     /**
      * Remove a permission from a user.
-    */
+     */
     public function remove_permission_from_user(Request $request, User $user)
     {
         $permission = Permission::findByName($request->input('permission'));
 
-        if (!$user->hasPermissionTo($permission)) {
+        if (! $user->hasPermissionTo($permission)) {
             return back()->with('error', 'User does not have this permission');
         }
 

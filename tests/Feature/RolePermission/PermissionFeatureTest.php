@@ -64,11 +64,10 @@ class PermissionFeatureTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('permission.index'));
 
-
         $response->assertInertia(function ($page) {
             $page->component('RolePermission/Permission') // Check the correct component is being rendered
-                  ->has('roles', 3) // Check that 'roles' has the correct count
-                  ->has('permissions', 4);
+                ->has('roles', 3) // Check that 'roles' has the correct count
+                ->has('permissions', 4);
         });
     }
 
@@ -79,7 +78,7 @@ class PermissionFeatureTest extends TestCase
         $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->post(route('permission.store'), [
-            'name' => 'new_permission'
+            'name' => 'new_permission',
         ]);
 
         $this->assertCount(5, Permission::all());
@@ -93,7 +92,7 @@ class PermissionFeatureTest extends TestCase
         $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->post(route('permission.store'), [
-            'name' => ''
+            'name' => '',
         ]);
 
         $this->assertCount(4, Permission::all());
@@ -111,7 +110,7 @@ class PermissionFeatureTest extends TestCase
         $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $response = $this->actingAs($user)->post(route('permission.store'), [
-            'name' => 'new_permission'
+            'name' => 'new_permission',
         ]);
 
         $response->assertStatus(403);
@@ -128,7 +127,7 @@ class PermissionFeatureTest extends TestCase
         $this->assertCount(5, Permission::all());
 
         $response = $this->actingAs($user)->put(route('permission.update', ['permission' => $permission->id]), [
-            'name' => 'updated_permission_name'
+            'name' => 'updated_permission_name',
         ]);
 
         $this->assertCount(5, Permission::all());
@@ -147,7 +146,7 @@ class PermissionFeatureTest extends TestCase
         $this->assertCount(5, Permission::all());
 
         $response = $this->actingAs($user)->put(route('permission.update', ['permission' => $permission->id]), [
-            'name' => ''
+            'name' => '',
         ]);
 
         $this->assertCount(5, Permission::all());
@@ -164,7 +163,7 @@ class PermissionFeatureTest extends TestCase
         $role = Role::create(['name' => 'old_name']);
 
         $response = $this->actingAs($user)->put(route('role.update', ['role' => $role->id]), [
-            'name' => 'updated_role_name'
+            'name' => 'updated_role_name',
         ]);
 
         $response->assertStatus(403);
@@ -181,7 +180,7 @@ class PermissionFeatureTest extends TestCase
         $user->givePermissionTo('old_permission');
 
         $this->actingAs($user)->put(route('permission.update', ['permission' => $permission->id]), [
-            'name' => 'new_permission'
+            'name' => 'new_permission',
         ]);
 
         $this->assertTrue($user->fresh()->hasPermissionTo('new_permission'));

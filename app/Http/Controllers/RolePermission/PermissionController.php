@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\RolePermission;
 
-use App\Constants\RolePermission\Constants;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -13,7 +12,6 @@ use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller implements HasMiddleware
 {
-
     public static function middleware(): array
     {
         return [
@@ -31,7 +29,7 @@ class PermissionController extends Controller implements HasMiddleware
 
         return Inertia::render('RolePermission/Permission', [
             'roles' => $roles,
-            'permissions' => $permissions
+            'permissions' => $permissions,
         ]);
     }
 
@@ -53,7 +51,7 @@ class PermissionController extends Controller implements HasMiddleware
         ]);
 
         $permission->update([
-            'name' => $validated['name']
+            'name' => $validated['name'],
         ]);
 
         return back()->with('success', 'Permission has been updated');

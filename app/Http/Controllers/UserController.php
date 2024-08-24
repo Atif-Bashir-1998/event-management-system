@@ -34,13 +34,14 @@ class UserController extends Controller implements HasMiddleware
             $user->highest_role = $user->highest_role() ? $user->highest_role()->name : null;
 
             $user->unassigned_permissions = $permissions->diff($user->getAllPermissions());
+
             return $user;
         });
 
         return Inertia::render('User/Index', [
             'users' => $users,
             'roles' => $roles,
-            'permissions' => $permissions
+            'permissions' => $permissions,
         ]);
     }
 
@@ -52,7 +53,7 @@ class UserController extends Controller implements HasMiddleware
             'is_email_verified' => 'boolean',
             'password' => 'required|string',
             'roles' => 'sometimes|array', // Expect an array of roles
-            'roles.*' => 'string' // Each item in the roles array must be a string
+            'roles.*' => 'string', // Each item in the roles array must be a string
         ]);
 
         $current_user = $request->user();
@@ -61,11 +62,11 @@ class UserController extends Controller implements HasMiddleware
         foreach ($validated['roles'] as $role_name) {
             $role = Role::findByName($role_name);
 
-            if (!$role) {
+            if (! $role) {
                 return back()->with('error', "The role {$role_name} does not exist.");
             }
 
-            if (!$this->has_sufficient_role_level($current_user, $role)) {
+            if (! $this->has_sufficient_role_level($current_user, $role)) {
                 return back()->with('error', 'You do not have permission to assign a role superior to your own.');
             }
         }
@@ -74,7 +75,7 @@ class UserController extends Controller implements HasMiddleware
             'name' => $validated['name'],
             'email' => $validated['email'],
             'email_verified_at' => $validated['is_email_verified'] ? now() : null,
-            'password' => Hash::make($validated['password'])
+            'password' => Hash::make($validated['password']),
         ]);
 
         // Remove all previous roles and assign new roles
@@ -91,7 +92,7 @@ class UserController extends Controller implements HasMiddleware
             'is_email_verified' => 'boolean',
             'password' => 'nullable|string|min:6', // Validate password only if it's present
             'roles' => 'sometimes|array', // Expect an array of roles
-            'roles.*' => 'string' // Each item in the roles array must be a string
+            'roles.*' => 'string', // Each item in the roles array must be a string
         ]);
 
         $current_user = $request->user();
@@ -100,11 +101,11 @@ class UserController extends Controller implements HasMiddleware
         foreach ($validated['roles'] as $role_name) {
             $role = Role::findByName($role_name);
 
-            if (!$role) {
+            if (! $role) {
                 return back()->with('error', "The role {$role_name} does not exist.");
             }
 
-            if (!$this->has_sufficient_role_level($current_user, $role)) {
+            if (! $this->has_sufficient_role_level($current_user, $role)) {
                 return back()->with('error', 'You do not have permission to assign a role superior to your own.');
             }
         }
@@ -124,8 +125,7 @@ class UserController extends Controller implements HasMiddleware
 
     public function destroy(Request $request, User $user)
     {
-        if(!$this->has_sufficient_role_level($request->user(), $user->highest_role()))
-        {
+        if (! $this->has_sufficient_role_level($request->user(), $user->highest_role())) {
             return back()->with('error', 'You do not have permission to delete a user with a role superior to your own.');
         }
 
