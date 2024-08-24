@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -18,14 +17,14 @@ class RolePermissionSeeder extends Seeder
         $resourceful_features = [
             'role',
             'permission',
-            'user'
+            'user',
         ];
 
         foreach ($resourceful_features as $feature) {
             $operations = ['create', 'update', 'view', 'delete'];
 
             foreach ($operations as $operation) {
-                Permission::create(['name' => $operation . "_" . $feature]);
+                Permission::create(['name' => $operation.'_'.$feature]);
             }
         }
 
@@ -35,7 +34,7 @@ class RolePermissionSeeder extends Seeder
             'add_user_permission',
             'remove_user_permission',
             'add_role_permission',
-            'remove_role_permission'
+            'remove_role_permission',
         ];
 
         foreach ($additional_permissions as $permission) {

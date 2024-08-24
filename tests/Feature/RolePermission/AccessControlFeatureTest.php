@@ -71,7 +71,7 @@ class AccessControlFeatureTest extends TestCase
         $new_permission = Permission::create(['name' => 'new_permission']);
 
         $response = $this->actingAs($user)->post(route('role.add-permission', ['role' => $new_role]), [
-            'permission' => $new_permission->name
+            'permission' => $new_permission->name,
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -86,7 +86,7 @@ class AccessControlFeatureTest extends TestCase
         $new_permission = Permission::create(['name' => 'new_permission']);
 
         $response = $this->actingAs($user)->post(route('role.add-permission', ['role' => $new_role]), [
-            'permission' => $new_permission->name
+            'permission' => $new_permission->name,
         ]);
 
         $response->assertStatus(403);
@@ -101,7 +101,7 @@ class AccessControlFeatureTest extends TestCase
         $new_permission = Permission::create(['name' => 'new_permission']);
 
         $response = $this->actingAs($user)->post(route('role.add-permission', ['role' => $new_role]), [
-            'permission' => $new_permission->name
+            'permission' => $new_permission->name,
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -121,7 +121,7 @@ class AccessControlFeatureTest extends TestCase
         $this->assertTrue($new_role->fresh()->hasPermissionTo('new_permission'));
 
         $response = $this->actingAs($user)->delete(route('role.remove-permission', ['role' => $new_role]), [
-            'permission' => $new_permission->name
+            'permission' => $new_permission->name,
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -137,7 +137,7 @@ class AccessControlFeatureTest extends TestCase
         $new_role->syncPermissions($new_permission->name);
 
         $response = $this->actingAs($user)->delete(route('role.remove-permission', ['role' => $new_role]), [
-            'permission' => $new_permission->name
+            'permission' => $new_permission->name,
         ]);
 
         $response->assertStatus(403);
@@ -154,7 +154,7 @@ class AccessControlFeatureTest extends TestCase
         $new_role->syncPermissions($new_permission->name);
 
         $response = $this->actingAs($user)->delete(route('role.remove-permission', ['role' => $new_role]), [
-            'permission' => $new_permission->name
+            'permission' => $new_permission->name,
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -171,7 +171,7 @@ class AccessControlFeatureTest extends TestCase
         $new_permission = Permission::create(['name' => 'new_permission']);
 
         $response = $this->actingAs($user)->post(route('user.add-permission', ['user' => $other_user]), [
-            'permission' => $new_permission->name
+            'permission' => $new_permission->name,
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -186,7 +186,7 @@ class AccessControlFeatureTest extends TestCase
         $new_permission = Permission::create(['name' => 'new_permission']);
 
         $response = $this->actingAs($user)->post(route('user.add-permission', ['user' => $other_user]), [
-            'permission' => $new_permission->name
+            'permission' => $new_permission->name,
         ]);
 
         $response->assertStatus(403);
@@ -203,7 +203,7 @@ class AccessControlFeatureTest extends TestCase
         $new_permission = Permission::create(['name' => 'new_permission']);
 
         $response = $this->actingAs($user_with_permission)->post(route('user.add-permission', ['user' => $test_user]), [
-            'permission' => $new_permission->name
+            'permission' => $new_permission->name,
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -223,7 +223,7 @@ class AccessControlFeatureTest extends TestCase
         $this->assertTrue($other_user->fresh()->hasPermissionTo('new_permission'));
 
         $response = $this->actingAs($user)->delete(route('user.remove-permission', ['user' => $other_user]), [
-            'permission' => $new_permission->name
+            'permission' => $new_permission->name,
         ]);
 
         $response->assertSessionHasNoErrors();
@@ -239,7 +239,7 @@ class AccessControlFeatureTest extends TestCase
         $other_user->givePermissionTo($new_permission->name);
 
         $response = $this->actingAs($user)->delete(route('user.remove-permission', ['user' => $other_user]), [
-            'permission' => $new_permission->name
+            'permission' => $new_permission->name,
         ]);
 
         $response->assertStatus(403);
@@ -257,7 +257,7 @@ class AccessControlFeatureTest extends TestCase
         $test_user->givePermissionTo('new_permission');
 
         $response = $this->actingAs($user_with_permission)->delete(route('user.remove-permission', ['user' => $test_user]), [
-            'permission' => $new_permission->name
+            'permission' => $new_permission->name,
         ]);
 
         $this->assertFalse($test_user->fresh()->hasPermissionTo('new_permission'));

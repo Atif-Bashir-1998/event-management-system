@@ -14,7 +14,9 @@ use Tests\TestCase;
 class UserPolicyTest extends TestCase
 {
     use RefreshDatabase;
+
     protected $policy;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -30,7 +32,7 @@ class UserPolicyTest extends TestCase
 
         $admin_role->syncPermissions(Permission::all());
 
-        $this->policy = new UserPolicy();
+        $this->policy = new UserPolicy;
     }
 
     public function test_user_with_admin_role_view_any_user(): void

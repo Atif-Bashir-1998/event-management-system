@@ -6,11 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Inertia\Inertia;
-use Spatie\Permission\Models\Role;
-use App\Constants\RolePermission\Constants;
 use Illuminate\Routing\Controllers\Middleware;
+use Inertia\Inertia;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller implements HasMiddleware
 {
@@ -31,7 +30,7 @@ class RoleController extends Controller implements HasMiddleware
 
         return Inertia::render('RolePermission/Role', [
             'roles' => $roles,
-            'permissions' => $permissions
+            'permissions' => $permissions,
         ]);
     }
 
@@ -53,7 +52,7 @@ class RoleController extends Controller implements HasMiddleware
         ]);
 
         $role->update([
-            'name' => $validated['name']
+            'name' => $validated['name'],
         ]);
 
         return back()->with('success', 'Role has been updated');

@@ -5,7 +5,6 @@ namespace Tests\Feature\RolePermission;
 use App\Constants\RolePermission\Constants;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -64,8 +63,8 @@ class RoleFeatureTest extends TestCase
 
         $response->assertInertia(function ($page) {
             $page->component('RolePermission/Role') // Check the correct component is being rendered
-                  ->has('roles', 3) // Check that 'roles' has the correct count
-                  ->has('permissions', 4);
+                ->has('roles', 3) // Check that 'roles' has the correct count
+                ->has('permissions', 4);
         });
     }
 
@@ -76,7 +75,7 @@ class RoleFeatureTest extends TestCase
         $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->post(route('role.store'), [
-            'name' => 'new_role'
+            'name' => 'new_role',
         ]);
 
         $this->assertCount(4, Role::all());
@@ -90,7 +89,7 @@ class RoleFeatureTest extends TestCase
         $user->assignRole(Constants::DEFAULT_ROLES['ADMIN']);
 
         $response = $this->actingAs($user)->post(route('role.store'), [
-            'name' => ''
+            'name' => '',
         ]);
 
         $this->assertCount(3, Role::all());
@@ -105,7 +104,7 @@ class RoleFeatureTest extends TestCase
         $user->assignRole(Constants::DEFAULT_ROLES['ORGANIZER']);
 
         $response = $this->actingAs($user)->post(route('role.store'), [
-            'name' => 'new_role'
+            'name' => 'new_role',
         ]);
 
         $response->assertStatus(403);
@@ -122,7 +121,7 @@ class RoleFeatureTest extends TestCase
         $this->assertCount(4, Role::all());
 
         $response = $this->actingAs($user)->put(route('role.update', ['role' => $role->id]), [
-            'name' => 'updated_role_name'
+            'name' => 'updated_role_name',
         ]);
 
         $this->assertCount(4, Role::all());
@@ -141,7 +140,7 @@ class RoleFeatureTest extends TestCase
         $this->assertCount(4, Role::all());
 
         $response = $this->actingAs($user)->put(route('role.update', ['role' => $role->id]), [
-            'name' => ''
+            'name' => '',
         ]);
 
         $this->assertCount(4, Role::all());
@@ -159,7 +158,7 @@ class RoleFeatureTest extends TestCase
         $role = Role::create(['name' => 'old_name']);
 
         $response = $this->actingAs($user)->put(route('role.update', ['role' => $role->id]), [
-            'name' => 'updated_role_name'
+            'name' => 'updated_role_name',
         ]);
 
         $response->assertStatus(403);
@@ -173,7 +172,7 @@ class RoleFeatureTest extends TestCase
         $admin_role = Role::where('name', 'admin')->first();
 
         $this->actingAs($user)->put(route('role.update', ['role' => $admin_role->id]), [
-            'name' => 'new_name'
+            'name' => 'new_name',
         ]);
 
         $this->assertEquals($user->name, $user->fresh()->name);

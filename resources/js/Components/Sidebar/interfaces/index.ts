@@ -1,7 +1,7 @@
-import { FunctionalComponent, HTMLAttributes } from "vue";
+import { FunctionalComponent, HTMLAttributes } from 'vue'
 
 export interface SidebarMenuItem {
-    route: string,
-    label: string,
-    icon: FunctionalComponent<HTMLAttributes>
+  route: string
+  label: string
+  icon: FunctionalComponent<HTMLAttributes>
 }

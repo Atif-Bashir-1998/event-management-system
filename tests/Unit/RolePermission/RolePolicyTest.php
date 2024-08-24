@@ -30,7 +30,7 @@ class RolePolicyTest extends TestCase
 
         $admin_role->syncPermissions(Permission::all());
 
-        $this->policy = new RolePolicy();
+        $this->policy = new RolePolicy;
     }
 
     public function test_user_with_admin_role_view_any_roles(): void

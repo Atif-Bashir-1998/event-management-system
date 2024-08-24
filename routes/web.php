@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\RolePermission\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RolePermission\AccessControlController;
+use App\Http\Controllers\RolePermission\PermissionController;
 use App\Http\Controllers\RolePermission\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;

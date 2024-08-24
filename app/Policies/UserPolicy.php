@@ -2,9 +2,7 @@
 
 namespace App\Policies;
 
-use App\Constants\RolePermission\Constants;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class UserPolicy
 {
