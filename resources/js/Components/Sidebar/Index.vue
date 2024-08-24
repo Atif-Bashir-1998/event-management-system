@@ -46,14 +46,14 @@
 </template>
 
 <script setup lang="ts">
-// import DarkLogo from "@/assets/images/logo/dark-logo.png";
 import DarkLogo from "@/assets/images/logo/vue-laravel.webp";
 import LightLogo from "@/assets/images/logo/vue-laravel.webp";
 import {
     HomeIcon,
     UserGroupIcon,
     LockClosedIcon,
-    PuzzlePieceIcon
+    PuzzlePieceIcon,
+    UserIcon
 } from "@heroicons/vue/24/outline";
 import { useSidebarStore } from "@/Stores/sidebar";
 import { useDarkModeStore } from "@/Stores/darkMode";
@@ -74,6 +74,7 @@ const menuItems: SidebarMenuItem[]= [
     {route: 'role.index', label: 'Role Management', icon: UserGroupIcon},
     {route: 'permission.index', label: 'Permission Management', icon: LockClosedIcon},
     {route: 'access-control', label: 'Access Control', icon: PuzzlePieceIcon},
+    {route: 'user.index', label: 'User Management', icon: UserIcon},
 ]
 
 onMounted(() => {
