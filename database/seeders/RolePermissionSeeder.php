@@ -17,7 +17,8 @@ class RolePermissionSeeder extends Seeder
         // creating permissions
         $resourceful_features = [
             'role',
-            'permission'
+            'permission',
+            'user'
         ];
 
         foreach ($resourceful_features as $feature) {
