@@ -67,4 +67,12 @@ class User extends Authenticatable
 
         return $highest_role;
     }
+
+    /**
+     * Define the many-to-many relationship between User and Event (Organized Events).
+     */
+    public function organized_events()
+    {
+        return $this->belongsToMany(Event::class, 'event_organizer', 'user_id', 'event_id');
+    }
 }
