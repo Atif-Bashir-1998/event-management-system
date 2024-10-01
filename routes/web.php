@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RolePermission\AccessControlController;
 use App\Http\Controllers\RolePermission\PermissionController;
@@ -36,6 +37,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/user/{user}/permissions', [AccessControlController::class, 'add_permission_to_user'])->name('user.add-permission');
     Route::delete('/user/{user}/permissions', [AccessControlController::class, 'remove_permission_from_user'])->name('user.remove-permission');
     Route::get('/access-control', [AccessControlController::class, 'index'])->name('access-control');
+
+    // event related routes
+    Route::resource('event', EventController::class);
 });
 
 require __DIR__.'/auth.php';

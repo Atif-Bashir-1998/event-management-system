@@ -54,11 +54,7 @@ class EventPolicy
             return true;
         }
 
-        if ($event->organizers->contains($user->id)) {
-            return true;
-        }
-
-        if ($user->id === $event->created_by) {
+        if ($event->organizers->contains($user->id) || $user->id === $event->created_by) {
             return true;
         }
 
